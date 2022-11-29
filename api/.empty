@@ -1,0 +1,27 @@
+for (const [key, value] of Object.entries(req.body)) {
+      updateOps[key] = value;
+    }
+
+    router.patch('/:productId', async (req, res, next) => {
+        const props = req.body;
+        try {
+            const result = await Product.update({_id: req.params.productId}, props).exec();
+            console.log(result);
+            res.status(200).json(result);
+        } catch (e) {
+            console.log(e);
+            res.status(500).json(e);
+        }
+    });
+
+
+
+// For the patch request in 2021, you can simplify the code as below.  ;)
+
+
+router.patch('/:id', (req, res, next) => {
+  const id = req.params.id;
+  Product.findByIdAndUpdate(id, { $set: req.body }, { new: true})
+    .then(result => res.status(200).json(result))
+    .catch(err => res.status(500).json({ error: err}))
+})
